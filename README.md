@@ -88,8 +88,8 @@ The resource kind templates are designed to make it much faster for you to defin
 
 To make use of these templates you must define a template that will extend the base template (though it can be empty). The name of this template is then passed to the base template, for example:
 
-~~~
-```yaml
+
+```
 {{- include "common.service" (list . .Values.service "mychart.service") }}
 {{- define "mychart.service" -}}
 
@@ -106,7 +106,7 @@ To make use of these templates you must define a template that will extend the b
 
 {{- end }}
 ```
-~~~
+
 Note that the [`common.service`](#commonservice) template defines three parameters:
 
 - The root context (usually `.`)
