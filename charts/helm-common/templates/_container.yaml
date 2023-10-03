@@ -9,6 +9,11 @@ securityContext:
   {{- toYaml $container.securityContext | nindent 2 }}
 image: "{{ $image.repository }}:{{ $image.tag | default $top.Chart.AppVersion }}"
 imagePullPolicy: {{ $container.image.pullPolicy }}
+env:
+{{- range $key, $value := $container.env }}
+- name: "{{ $key }}"
+  value: "{{ $value }}"
+{{- end }}
 args:
   {{- toYaml $container.args | nindent 2 }}
 resources:
