@@ -1,0 +1,58 @@
+{{/* vim: set filetype=mustache: */}}
+
+{{- define "common.podMonitor.metadata" -}}
+{{- $podMonitor := index . 1 }}
+{{- with $podMonitor.namespace }}
+namespace: {{ . }}
+{{- end }}
+{{- with $podMonitor.labels }}
+labels:
+{{ toYaml . | nindent 2 }}
+{{- end }}
+{{- end }}
+
+{{- define "common.podMonitor.tpl" -}}
+{{- $top := first . }}
+{{- $podMonitor := index . 1 }}
+apiVersion: monitoring.coreos.com/v1
+kind: podMonitor
+metadata:
+  {{- include "common.metadata" (append . "common.podMonitor.metadata") | nindent 2 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "common.selectorLabels" $top | nindent 6 }}
+  namespaceSelector:
+    matchNames:
+    - {{ $top.Release.Namespace | quote }}
+  endpoints:
+  - port: "{{ $podMonitor.port }}"
+    {{- with $podMonitor.path }}
+    path: {{ . }}
+    {{- end }}
+    {{- with $podMonitor.interval }}
+    interval: {{ . }}
+    {{- end }}
+    {{- with $podMonitor.scrapeTimeout }}
+    scrapeTimeout: {{ . }}
+    {{- end }}
+    {{- $basicAuth := $podMonitor.basicAuth | default (dict) }}
+    {{- $name := $basicAuth.secretName | default (include "common.fullname" $top) }}
+    {{- if $basicAuth.enabled }}
+    basicAuth:
+      username:
+        name: {{ $name }}
+        key: {{ $basicAuth.usernameKey | default "username" }}
+      password:
+        name: {{ $name }}
+        key: {{ $basicAuth.passwordKey | default "password" }}
+    {{- end }}
+{{- end }}
+
+{{- define "common.podMonitor" -}}
+{{- $top := first . }}
+{{- $podMonitor := index . 1 }}
+{{- if $podMonitor.enabled }}
+  {{- include "common.utils.merge" (append . "common.podMonitor.tpl") }}
+{{- end }}
+{{- end }}
