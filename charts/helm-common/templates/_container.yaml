@@ -16,6 +16,8 @@ env:
 {{- end }}
 args:
   {{- toYaml $container.args | nindent 2 }}
+lifecycle:
+  {{- toYaml $container.lifecycle | nindent 2 }}
 resources:
   {{- toYaml $container.resources | nindent 2 }}
 livenessProbe:

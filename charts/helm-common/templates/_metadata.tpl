@@ -39,6 +39,9 @@ Create a standard metadata header
 {{- end }}
 
 
+{{/*
+Allow the release namespace to be overridden for multi-namespace deployments in combined charts
+*/}}
 {{- define "common.namespace" -}}
   {{- if .Values.namespaceOverride -}}
     {{- .Values.namespaceOverride -}}
