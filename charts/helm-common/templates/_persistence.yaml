@@ -1,0 +1,10 @@
+{{/* vim: set filetype=mustache: */}}
+{{/* TODO: have different types of storage */}}
+
+{{- define "common.persistence" -}}
+{{- $top := first . }}
+{{- $persistence := index . 1 }}
+{{- if and $persistence.enabled (eq (lower $persistence.type) "pvc") }}
+  {{- include "common.pvc" (list $top $persistence.pvc) }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,48 @@
+
+{{/* vim: set filetype=mustache: */}}
+
+{{- define "common.pvc.metadata" -}}
+{{- $pvc := index . 1 }}
+{{- with $pvc.annotations }}
+annotations:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- with $pvc.extraPvcLabels }}
+labels:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+  {{- with $pvc.finalizers  }}
+  finalizers:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+{{- end }}
+
+{{- define "common.pvc.tpl" -}}
+{{- $top := first . }}
+{{- $pvc := index . 1 }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  {{- include "common.metadata" (append . "common.pvc.metadata") | nindent 2 }}
+
+spec:
+  accessModes:
+    {{- range $pvc.accessModes }}
+    - {{ . | quote }}
+    {{- end }}
+  resources:
+    requests:
+      storage: {{ $pvc.size | quote }}
+  {{- if $pvc.storageClassName }}
+  storageClassName: {{ $pvc.storageClassName }}
+  {{- end -}}
+  {{- with $pvc.selectorLabels }}
+  selector:
+    matchLabels:
+{{ toYaml . | indent 6 }}
+  {{- end }}
+{{- end }}
+
+{{- define "common.pvc" -}}
+{{- include "common.utils.merge" (append . "common.pvc.tpl") }}
+{{- end }}
