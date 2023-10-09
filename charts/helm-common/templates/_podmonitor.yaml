@@ -25,7 +25,7 @@ spec:
   namespaceSelector:
     matchNames:
     - {{ $top.Release.Namespace | quote }}
-  endpoints:
+  podMetricsEndpoints:
   - port: "{{ $podMonitor.port }}"
     {{- with $podMonitor.path }}
     path: {{ . }}

@@ -5,6 +5,7 @@
 {{- $deployment := index . 1 }}
 {{- $autoscaling := index . 2 }}
 {{- $serviceAccount := index . 3 }}
+{{- $pvcName := include "common.fullname" $top }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,6 +19,14 @@ spec:
       {{- include "common.selectorLabels" $top | nindent 6 }}
   template:
     {{- include "common.pod.template" (list $top $deployment $serviceAccount) | nindent 4 }}
+{{- /*
+  {{- if $deployment.persistence.enabled }}
+  volumes:
+    - name: {{ $pvcName }}
+      persistentVolumeClaim:
+        claimName: {{ $pvcName }}
+  {{- end }}
+*/}}
 {{- end }}
 
 {{- define "common.deployment" -}}
