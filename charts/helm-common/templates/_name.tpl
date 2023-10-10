@@ -20,7 +20,11 @@ If release name contains chart name it will be used as a full name.
   {{- if contains $name .Release.Name }}
     {{- .Release.Name | trunc 63 | trimSuffix "-" }}
   {{- else }}
-    {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+    {{- if .Values.appComponent }}
+      {{- printf "%s-%s-%s" .Release.Name $name .Values.appComponent | trunc 63 | trimSuffix "-" }}
+    {{- else }}
+      {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+    {{- end }}
   {{- end }}
 {{- end }}
 {{- end }}

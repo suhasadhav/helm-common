@@ -5,7 +5,9 @@
 {{- $deployment := index . 1 }}
 {{- $autoscaling := index . 2 }}
 {{- $serviceAccount := index . 3 }}
+{{- /*
 {{- $pvcName := include "common.fullname" $top }}
+*/}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:

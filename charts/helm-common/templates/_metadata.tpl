@@ -21,6 +21,9 @@ Selector labels
 {{- define "common.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "common.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- if .Values.appComponent }}
+app.kubernetes.io/component: {{ .Values.appComponent }}
+{{- end }}
 {{- end }}
 
 {{- define "common.metadata.tpl" -}}
@@ -49,3 +52,4 @@ Allow the release namespace to be overridden for multi-namespace deployments in 
     {{- .Release.Namespace -}}
   {{- end -}}
 {{- end -}}
+

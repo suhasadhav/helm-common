@@ -39,6 +39,10 @@ spec:
   {{- with $pod.priorityClassName }}
   priorityClassName: {{ . }}
   {{- end }}
+  {{- with $pod.hostAliases }}
+  hostAliases:
+    {{- toYaml . | nindent 2 }}
+  {{- end }}
 {{- end }}
 
 {{- define "common.pod.template" -}}
