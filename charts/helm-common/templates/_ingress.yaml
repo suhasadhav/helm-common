@@ -12,6 +12,7 @@ annotations:
 {{- $top := first . }}
 {{- $ingress := index . 1 }}
 {{- $service := index . 2 }}
+
 {{- $fullName := include "common.fullname" $top }}
 {{- $svcPort := $service.port }}
 {{- if semverCompare ">=1.19-0" $top.Capabilities.KubeVersion.GitVersion -}}

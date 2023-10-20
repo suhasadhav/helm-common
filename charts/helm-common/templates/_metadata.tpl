@@ -10,9 +10,7 @@ helm.sh/chart: {{ include "common.chart" . }}
 app.kubernetes.io/version: {{ . | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- if  .Values.commonLabels }}
-{{ toYaml  .Values.commonLabels }}
-{{- end }}
+
 {{- end }}
 
 {{/*
@@ -21,17 +19,25 @@ Selector labels
 {{- define "common.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "common.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-{{- if .Values.appComponent }}
-app.kubernetes.io/component: {{ .Values.appComponent }}
 {{- end }}
+
+{{- define "common.componentLabels" -}}
+{{- $component := . -}}
+app.kubernetes.io/component: {{ $component.appComponent }}
 {{- end }}
 
 {{- define "common.metadata.tpl" -}}
 {{- $top := first . -}}
+{{- $component := last . -}}
+{{- if $component.appComponent }}
+name: {{ include "common.fullname" $top }}-{{ $component.appComponent }}
+{{- else }}
 name: {{ include "common.fullname" $top }}
+{{- end }}
 namespace: {{ include "common.namespace" $top }}
 labels:
-  {{- include "common.labels" $top | nindent 2 }}
+  {{- include "common.labels" $top  | nindent 2 }}
+  {{- include "common.componentLabels"  $component  | nindent 2 }}
 {{- end }}
 
 {{/*

@@ -1,13 +1,14 @@
 {{- define "common.monitoring" -}}
 {{- $top := first . }}
 {{- $monitoring := index . 1 }}
+{{- $component := index . 2 }}
 {{- if and $monitoring.enabled (eq (lower $monitoring.type) "servicemonitor") }}
   {{- $serviceMonitor := dict "enabled" true }}
   {{- $mergedDict := merge $serviceMonitor $monitoring.serviceMonitor }}
-  {{- include "common.serviceMonitor" (list $top $mergedDict  ) }}
+  {{- include "common.serviceMonitor" (list $top $mergedDict $component ) }}
 {{- else if and $monitoring.enabled (eq (lower $monitoring.type) "podmonitor") }}
   {{- $podMonitor := dict "enabled" true }}
   {{- $mergedDict := merge $podMonitor $monitoring.podMonitor }}
-  {{- include "common.podMonitor" (list $top $mergedDict ) }}
+  {{- include "common.podMonitor" (list $top $mergedDict $component) }}
 {{- end }}
 {{- end }}

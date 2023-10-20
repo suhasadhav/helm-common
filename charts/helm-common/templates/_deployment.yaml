@@ -5,13 +5,14 @@
 {{- $deployment := index . 1 }}
 {{- $autoscaling := index . 2 }}
 {{- $serviceAccount := index . 3 }}
+{{- $component := index . 4 }}
 {{- /*
 {{- $pvcName := include "common.fullname" $top }}
 */}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  {{- include "common.metadata" (list $top) | nindent 2 }}
+  {{- include "common.metadata" (list $top $component) | nindent 2 }}
 spec:
   {{- if not $autoscaling.enabled }}
   replicas: {{ $deployment.replicaCount | default 1 }}
@@ -19,8 +20,9 @@ spec:
   selector:
     matchLabels:
       {{- include "common.selectorLabels" $top | nindent 6 }}
+      {{- include "common.componentLabels" $component  | nindent 6  }}
   template:
-    {{- include "common.pod.template" (list $top $deployment $serviceAccount) | nindent 4 }}
+    {{- include "common.pod.template" (list $top $deployment $serviceAccount $component) | nindent 4 }}
 {{- /*
   {{- if $deployment.persistence.enabled }}
   volumes:

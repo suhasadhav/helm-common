@@ -40,7 +40,7 @@ It provides utilities that reflect best practices of Kubernetes chart developmen
 The following command allows you to download and install all the charts from our repository:
 
 ```shell
-$ helm repo add common-charts https://hahow-helm-charts.storage.googleapis.com/
+$ helm repo add common-charts https://suhasadhav.github.io/helm-common/
 ```
 
 ### Adding Dependency
@@ -50,8 +50,8 @@ To use the library chart, `common` should be listed in `dependencies` field in y
 ```yaml
 dependencies:
   - name: common
-    version: 0.4.1
-    repository: https://hahow-helm-charts.storage.googleapis.com/
+    version: 0.1.4
+    repository: https://suhasadhav.github.io/helm-common/
 ```
 
 Once you have defined dependencies, you should run the following command to download this chart into your `charts/` directory:

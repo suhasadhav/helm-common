@@ -23,6 +23,7 @@ labels:
 {{- define "common.serviceMonitor.tpl" -}}
 {{- $top := first . }}
 {{- $serviceMonitor := index . 1 }}
+{{- $component := index . 2 }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -31,6 +32,7 @@ spec:
   selector:
     matchLabels:
       {{- include "common.selectorLabels" $top | nindent 6 }}
+      {{- include "common.componentLabels" $component  | nindent 6  }}
   namespaceSelector:
     matchNames:
     - {{ $top.Release.Namespace | quote }}
@@ -61,6 +63,7 @@ spec:
 {{- define "common.serviceMonitor" -}}
 {{- $top := first . }}
 {{- $serviceMonitor := index . 1 }}
+{{- $component := index . 2 }}
 {{- if $serviceMonitor.enabled }}
   {{- include "common.utils.merge" (append . "common.serviceMonitor.tpl") }}
 {{- end }}

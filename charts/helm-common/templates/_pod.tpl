@@ -4,6 +4,7 @@
 {{- $top := first . }}
 {{- $pod := index . 1 }}
 {{- $serviceAccount := index . 2 }}
+{{- $component := index . 3 }}
 metadata:
   {{- with $pod.podAnnotations }}
   annotations:
@@ -11,6 +12,7 @@ metadata:
   {{- end }}
   labels:
     {{- include "common.selectorLabels" $top | nindent 4 }}
+    {{- include "common.componentLabels" $component  | nindent 4  }}
   {{- with $pod.podLabels }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
